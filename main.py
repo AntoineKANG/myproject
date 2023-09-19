@@ -5,6 +5,20 @@ app = Flask(__name__)
 
 # Define a route for the homepage
 @app.route('/')
+def hello_world(): 
+    prefix_google = """
+    <!-- Google tag (gtag.js) -->
+    <script async 
+    src="https://www.googletagmanager.com/gtag/js?id=G-QY0W6CSL6X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || []; 
+        function gtag(){dataLayer.push(arguments);} 
+        gtag('js', new Date());
+        gtag('config', 'G-QY0W6CSL6X'); 
+    </script>
+      """
+    return prefix_google + "Hello World"
+
 def hello_world():
     return 'Hello World'
 
