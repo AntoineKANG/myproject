@@ -1,62 +1,32 @@
-from flask import Flask
+from flask import Flask, render_template, request,make_response
+import logging
+import sys
 
 # Create a Flask web application
 app = Flask(__name__)
 
+# Configure logging
+logging.basicConfig(level=logging.INFO, handlers=[logging.StreamHandler(sys.stdout)])
+logger = logging.getLogger(__name__)
+logs = []
+
 # Define a route for the homepage
 @app.route('/')
 def root():
-    return """ 
-   <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Hello World</title>
-            
-           <!-- Google tag (gtag.js) -->
-            <script async src="https://www.googletagmanager.com/gtag/js?id=G-QY0W6CSL6X"></script>
-            <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
+    return render_template("index.html")
 
-            gtag('config', 'G-QY0W6CSL6X');
-            </script>
-        </head>
-        <body>
-            <h1>Hello World</h1>
-            <button id="analyticsButton">Click</button>
-
-            <script>
-                document.getElementById("analyticsButton").addEventListener("click", function () {
-                    gtag('event', 'button_click', {
-                        'event_category': 'Button',
-                        'event_label': 'Button Clicked'
-                    });
-                });
-            </script>
-        </body>
-        </html>
-    """
-
-# def hello_world(): 
-#     prefix_google = """
-#     <!-- Google tag (gtag.js) -->
-#     <script async 
-#     src="https://www.googletagmanager.com/gtag/js?id=G-QY0W6CSL6X"></script>
-#     <script>
-#         window.dataLayer = window.dataLayer || []; 
-#         function gtag(){dataLayer.push(arguments);} 
-#         gtag('js', new Date());
-#         gtag('config', 'G-QY0W6CSL6X'); 
-#     </script>
-#       """
-#     return prefix_google + "Hello World"
-
-# def hello_world():
-#     return 'Hello World'
-
+@app.route('/logger', methods=['GET', 'POST'])
+def logger_page():
+    log_message ='This a log message'
+    logger.info('This is a log message!')
+    
+    if request.method == 'POST' and 'log_message' in request.form:
+        log_message = request.form.get('log_message')
+        logger.info(log_message)
+        # Render the HTML page
+        return render_template('logger.html', logs=log_message)
+    
+    return render_template("logger.html", logs=log_message)
 # Run the application
 if __name__ == '__main__':
     app.run(debug=True)
