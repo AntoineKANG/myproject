@@ -110,6 +110,7 @@ def trends_page():
     data_json = json.dumps(data)
     return render_template("trends.html", data_json=data_json)
 
+
 # Run the application
 if __name__ == '__main__':
     app.run(debug=True)
